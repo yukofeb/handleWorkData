@@ -1,0 +1,4 @@
+[toggl]
+APIKEY={{your_toggl_api_key}}
+TIMEZONE = +09:00
+TIMEZONE_AREA = Asia/Tokyo
