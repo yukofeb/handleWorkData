@@ -7,11 +7,12 @@ env作成
 ```
 $ python3.8 -m venv env
 $ . env/bin/activate
+(env) $ pip install -r requirements.txt
 ```
 
 conf追記  
 ```
-$ cp config.ini.template config.ini
+(env) $ cp config.ini.template config.ini
 ```
 
 ## 使い方
