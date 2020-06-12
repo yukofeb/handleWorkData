@@ -19,7 +19,11 @@ class DataHandle():
         hours, minutes = divmod(minutes, 60)
         return '{0:02d}:{1:02d}:{2:02d}'.format(int(hours), int(minutes), int(seconds))
 
-    def _calculate_worktime(self):
+    def _list_selected_period(self, start_date, end_date):
+        for day in range((end_date - start_date).days):
+            yield (start_date + td(day)).date()
+
+    def _calculate_worktime(self, start_date, end_date):
         """
         Calculate worktime data of Toggl
         """
@@ -49,7 +53,15 @@ class DataHandle():
         result['min'] = result['min'].apply(lambda x: x.time())
         result['max'] = result['max'].apply(lambda x: x.time())
         result['breaktime'] = result['breaktime'].apply(lambda x: self._timedelta_to_string(x.total_seconds()))
-        result = result[['min', 'max', 'breaktime']]
+
+        ## 日付の範囲取得
+        array_date = []
+        for i in self._list_selected_period(start_date, end_date):
+            array_date.append(i)
+        pd_date = pd.Series(array_date)
+        result = result.merge(pd_date.to_frame().rename(columns={0: 'date'}), left_on='start_date', right_on='date', how='right')
+        result = result[['date', 'min', 'max', 'breaktime']].fillna('').sort_values('date').reset_index(drop=True)
+
         return result
 
     def _print_result(self, summary_data):
@@ -58,6 +70,6 @@ class DataHandle():
         """
         summary_data.to_csv('summary.csv')
 
-    def create_monthly_summary(self):
-        summary = self._calculate_worktime()
+    def create_monthly_summary(self, start_date, end_date):
+        summary = self._calculate_worktime(start_date, end_date)
         self._print_result(summary)
