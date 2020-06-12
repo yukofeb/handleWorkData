@@ -21,7 +21,7 @@ class DataHandle():
 
     def _list_selected_period(self, start_date, end_date):
         for day in range((end_date - start_date).days):
-                yield (start_date + td(day)).date()
+            yield (start_date + td(day)).date()
 
     def _calculate_worktime(self, start_date, end_date):
         """
