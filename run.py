@@ -30,7 +30,7 @@ def make_monthly_summary(year, month):
 
     # データ加工、結果出力
     d_handle = data_handle.DataHandle(response.text, TIMEZONE_AREA)
-    d_handle.create_monthly_summary()
+    d_handle.create_monthly_summary(start_date=start_date, end_date=end_date)
 
 if __name__ == '__main__':
     make_monthly_summary()
